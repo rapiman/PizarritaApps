@@ -1,4 +1,7 @@
-import { leerPref } from '../comun/preferencias';
+import { leerPref } from './preferencias';
+
+// (Vive en canvas/comun desde el 2026-11-23: la usan las reglas de Edit Pro, que viajan fuera de
+// Pizarrita. Sin una idea anotada, lo que se cambia queda en la página. Quien anota: Idea.tsx.)
 
 // LA DISPOSICIÓN DE UNA IDEA (2026-10-08, JP: «lo compartido debería guardarse»; «es propio de su
 // idea y sus bolsas»). Cómo está armado por dentro un programa —en Edit Pro la vista onda o

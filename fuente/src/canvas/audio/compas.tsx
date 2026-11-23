@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { tr } from '../../traducir';
-import { guardarDisposicion, leerDisposicion } from '../tablero/disposicion';
+import { guardarDisposicion, leerDisposicion } from '../comun/disposicion';
 
 // LA REGLA EN COMPASES (2026-09-30, JP: «me gustaría una regla como bpm y figura 3/4 o 4/4»), en
 // la vista de onda y en el multipista de Pizarrita Edit Pro. El tempo y el compás son del audio (se

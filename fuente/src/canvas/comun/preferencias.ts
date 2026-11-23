@@ -19,8 +19,6 @@
 // (`sincronizarCuenta`); al guardar, se sube. Lo que estaba solo en este navegador de antes se sube
 // la primera vez.
 import { useCallback, useSyncExternalStore } from 'react';
-import { apiGet, apiPostAlSalir } from '../../api/transporte';
-import { pedirApi } from './pedirApi';
 
 export type Dueno = 'navegador' | 'cuenta';
 export interface OpcionesPref {
@@ -161,8 +159,23 @@ function escribirLlave(llave: string, valor: unknown, aviso = true): void {
 // Las llaves que son de la persona (viajan entre equipos). Además, cualquiera guardada con
 // `dueno: 'cuenta'`.
 const DE_LA_CUENTA = new Set(['pz:dibujo:color', 'pz:dibujo:grosor', 'pz:dibujo:forma']);
-type W = { sesion?: string; getIdiomaValido?: () => string };
-const conSesion = () => !!(window as unknown as W).sesion;
+// CÓMO SE HABLA CON LA CUENTA (2026-11-23, docs/anfitrion.md): esto es del kit y viaja fuera de
+// Pizarrita, donde no hay cuentas; por eso no llama a la API. Pizarrita le instala cómo hacerlo al
+// arrancar (main.tsx, con api/cuentaPizarrita.ts). Sin cuenta instalada, todo queda en el navegador.
+export type CuentaPref = {
+  /** ¿Hay alguien con sesión? */
+  conSesion(): boolean;
+  /** Lo que la cuenta tiene guardado. */
+  traer(): Promise<{ llave: string; valor: string }[]>;
+  subir(llave: string, valor: string): void;
+  /** Lo mismo, al irse de la página (sin esperar respuesta). */
+  subirAlSalir(llave: string, valor: string): void;
+};
+let cuenta: CuentaPref | null = null;
+export function ponerCuenta(c: CuentaPref): void {
+  cuenta = c;
+}
+const conSesion = () => !!cuenta && cuenta.conSesion();
 const subiendo = new Map<string, number>();
 function subir(llave: string): void {
   if (!conSesion()) return;
@@ -172,19 +185,16 @@ function subir(llave: string): void {
     llave,
     window.setTimeout(() => {
       subiendo.delete(llave);
-      const c = crudo(llave);
-      void pedirApi('guardardato_preferencia', { llave, valor: c ?? '' }).catch(() => undefined);
+      cuenta?.subir(llave, crudo(llave) ?? '');
     }, 800),
   );
 }
 // Al irse de la página (navegar a otra pizarrita la recarga), lo que esperaba para subir se
 // sube ya: si no, la cuenta quedaba con lo de antes y, al volver, eso pisaba lo de este navegador.
 window.addEventListener('pagehide', () => {
-  const w = window as unknown as W;
   for (const [llave, t] of subiendo) {
     window.clearTimeout(t);
-    const c = crudo(llave);
-    apiPostAlSalir('guardardato_preferencia', { llave, valor: c ?? '', sesion: w.sesion || '', idioma: w.getIdiomaValido?.() ?? 'ES' });
+    cuenta?.subirAlSalir(llave, crudo(llave) ?? '');
   }
   subiendo.clear();
 });
@@ -193,15 +203,13 @@ let sincronizada = false;
  *  la pone el jQuery al estar lista la página (rutinas.js), que puede ser después de que arranca
  *  React: se espera un poco (hasta 15 s) antes de darse por anónimo. */
 export function sincronizarCuenta(intento = 0): void {
-  if (sincronizada) return;
+  if (sincronizada || !cuenta) return;
   if (!conSesion()) {
     if (intento < 30) window.setTimeout(() => sincronizarCuenta(intento + 1), 500);
     return;
   }
   sincronizada = true;
-  const w = window as unknown as W;
-  apiGet<{ llave: string; valor: string }>('consulta_preferencias', { sesion: w.sesion || '', idioma: w.getIdiomaValido?.() ?? 'ES' }).done((r) => {
-    const filas = Array.isArray(r.rows) ? r.rows : [];
+  void cuenta.traer().then((filas) => {
     const enServidor = new Set<string>();
     for (const f of filas) {
       if (!f.llave || typeof f.valor !== 'string') continue;

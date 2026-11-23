@@ -17,7 +17,6 @@
 // en scripts/ideas.js, despues de los colores) y cuando la configuracion cambia.
 
 import { useEffect, useState } from 'react';
-import { apiGet } from './api/transporte';
 import { cargarFuentesComunes } from './fuentesComunes';
 import { descriptoresCss } from './fuenteAjuste';
 
@@ -581,12 +580,19 @@ function ponerIcono(ruta: string | null): void {
 
 // Pide y pinta el estilo de una pizarrita. Con `idea` en 0 (la portada) se pide igual:
 // la portada tambien puede tener fuente.
+// (2026-11-23) Cómo se pide lo instala Pizarrita (main.tsx, api/cuentaPizarrita.ts): este archivo
+// viaja con los programas fuera de Pizarrita, donde no hay API. Sin eso, no se pide nada.
+type TraerEstilo = (idea: number) => Promise<Record<string, unknown> | null>;
+let traerEstilo: TraerEstilo | null = null;
+export function ponerTraerEstilo(f: TraerEstilo): void {
+  traerEstilo = f;
+}
 export function aplicarEstilo(idea: number): void {
   ideaActual = Number(idea) || 0;
   const pedida = ideaActual;
-  apiGet('consulta_estilo', { idea: pedida }).done((data) => {
+  if (!traerEstilo) return;
+  void traerEstilo(pedida).then((fila) => {
     if (pedida !== ideaActual) return; // ya se navego a otra
-    const fila = data && Array.isArray(data.rows) ? (data.rows[0] as Record<string, unknown> | undefined) : undefined;
     actual = fila ? normalizar(fila) : null;
     ponerIcono(actual?.icono ?? null);
     // El velo de carga espera tambien al tema: sin esto se veia un momento el clasico
@@ -681,8 +687,12 @@ export function listaDeTemas(): Promise<TemaDisponible[]> {
   }
   return temasDisponibles;
 }
-window.__aplicarEstilo = aplicarEstilo;
-window.__refrescarEstilo = refrescarEstilo;
-// Para revisar un tema sin guardarlo (consola o una sesión de Claude): `__previsualizarEstilo({ tema: 'pizarritos-6' })`,
-// y `__previsualizarEstilo(null)` vuelve a lo real. Es lo mismo que hace la ventana de configurar al probar.
-(window as unknown as { __previsualizarEstilo?: typeof previsualizar }).__previsualizarEstilo = previsualizar;
+// LOS GANCHOS PARA EL jQUERY DE PIZARRITA (ideas.js, rutinas.js). Los pone main.tsx al arrancar (y no
+// este archivo al cargarse, desde el 2026-11-23): fuera de Pizarrita no se ensucia la página.
+export function instalarEstiloEnLaPagina(): void {
+  window.__aplicarEstilo = aplicarEstilo;
+  window.__refrescarEstilo = refrescarEstilo;
+  // Para revisar un tema sin guardarlo (consola o una sesión de Claude): `__previsualizarEstilo({ tema: 'pizarritos-6' })`,
+  // y `__previsualizarEstilo(null)` vuelve a lo real. Es lo mismo que hace la ventana de configurar al probar.
+  (window as unknown as { __previsualizarEstilo?: typeof previsualizar }).__previsualizarEstilo = previsualizar;
+}
