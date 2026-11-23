@@ -62,7 +62,8 @@ export function tipoDeNombre(nombre: string): string {
 
 /** Una ruta adentro que no choque con las que ya hay, para un archivo con ese nombre. */
 export function rutaLibre(archivos: ReadonlyMap<string, unknown>, nombre: string): string {
-  const limpio = nombre.normalize('NFKD').replace(/[^A-Za-z0-9._-]+/g, '_').replace(/^[._]+/, '').slice(-80) || 'archivo';
+  // Las tildes se van (Joaquín → Joaquin); lo demás que no sea letra, número, punto o guion, a «_».
+  const limpio = nombre.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9._-]+/g, '_').replace(/^[._]+/, '').slice(-80) || 'archivo';
   const punto = limpio.lastIndexOf('.');
   const base = punto > 0 ? limpio.slice(0, punto) : limpio;
   const ext = punto > 0 ? limpio.slice(punto) : '';
