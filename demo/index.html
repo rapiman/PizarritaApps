@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Un programa de Pizarrita, sin Pizarrita</title>
+<link rel="stylesheet" href="../dist/iconos.css">
+<link rel="stylesheet" href="../dist/pz-app.css">
+<style>
+  body { margin: 24px; font: 15px/1.5 system-ui, sans-serif; color: #202124; max-width: 900px; }
+  code { background: #eef1f4; padding: 1px 4px; border-radius: 3px; }
+  #registro { margin-top: 12px; padding: 8px; background: #f6f7f9; border: 1px solid #c4c7cc; border-radius: 6px; white-space: pre-wrap; font: 12px/1.4 ui-monospace, monospace; min-height: 2em; }
+</style>
+</head>
+<body>
+<h1>Un programa de Pizarrita, sin Pizarrita</h1>
+<p>Esta página no carga nada de Pizarrita System: ni la pizarra, ni la sesión, ni la base. Solo
+<code>pz-app.js</code> y <code>pz-app.css</code>. La calculadora es la misma que vive en las pizarras.</p>
+<p>Para probar: hacer unas cuentas (quedan en la cinta), <b>Guardar</b> (baja un archivo <code>.json</code>),
+recargar la página y <b>Abrir</b> ese archivo: la cinta vuelve como estaba.</p>
+
+<p>Idioma: <a href="?idioma=es">español</a> · <a href="?idioma=en">English</a></p>
+
+<pz-app id="calcu" programa="calculadora" editar nombre="mis-cuentas"></pz-app>
+<script>
+  // El idioma se le dice a la etiqueta con su atributo, antes de cargar el programa.
+  var idioma = new URLSearchParams(location.search).get('idioma');
+  if (idioma) document.getElementById('calcu').setAttribute('idioma', idioma);
+</script>
+
+<h2>Pizarrita Edit Pro</h2>
+<p>El editor de audio, también sin Pizarrita. <b>Abrir</b> un audio del equipo (mp3, wav…), editarlo
+(cortar, pegar, fundidos, eco, grabar encima) y <b>Guardar</b>: baja un <code>.zip</code> con el audio
+original, las ediciones y el audio ya armado. Ese <code>.zip</code> se vuelve a abrir acá mismo.
+Para probar sin buscar un audio: bajar <a href="prueba-editpro.zip" download>prueba-editpro.zip</a> y abrirlo.</p>
+<pz-app id="editpro" programa="editpro" editar></pz-app>
+<script>
+  if (idioma) document.getElementById('editpro').setAttribute('idioma', idioma);
+</script>
+
+<p><label><input type="checkbox" id="recibir"> Que la página reciba el archivo en vez de bajarlo (la otra vía de guardado)</label></p>
+<div id="registro">Aquí se anota lo que la página recibe.</div>
+
+<script src="../dist/pz-app.js"></script>
+<script>
+  document.addEventListener('pz-guardar', function (e) {
+    if (!document.getElementById('recibir').checked) return;
+    e.preventDefault();
+    var d = e.detail.documento;
+    document.getElementById('registro').textContent =
+      'La página recibió el archivo (' + e.detail.archivo.size + ' bytes) del programa «' + d.programa + '».\n' +
+      'Líneas en la cinta: ' + ((d.config.calculadora && d.config.calculadora.cinta) || []).length;
+  });
+</script>
+</body>
+</html>

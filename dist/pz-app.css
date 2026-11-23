@@ -1,0 +1,194 @@
+/* EL ASPECTO DE LA ENTREGA (2026-11-23, docs/anfitrion.md, paso 3a): simple, sin temas.
+   Lo de cada programa está COPIADO de css/estilo.css (su forma) y vestido acá. Si cambia allá,
+   cambiar acá (pendiente: que cada programa tenga su .css propio y se arme de una sola fuente). */
+pz-app { display: inline-block; font: 14px/1.3 system-ui, sans-serif; color: #202124; }
+.pza_marco { border: 1px solid #c4c7cc; border-radius: 6px; background: #f6f7f9; overflow: hidden; }
+.pza_barra { display: flex; align-items: center; gap: 6px; padding: 4px 6px; background: #e4e7eb; border-bottom: 1px solid #c4c7cc; }
+.pza_nombre { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-weight: 600; }
+.pza_boton { margin: 0; padding: 2px 10px; font: inherit; color: inherit; background: #fff; border: 1px solid #b4b8be; border-radius: 4px; cursor: pointer; }
+.pza_boton:hover { background: #eef1f4; }
+.pza_aviso { padding: 4px 8px; background: #fde7e9; color: #8a1c25; border-bottom: 1px solid #f1b9be; }
+.pza_cuerpo { padding: 4px; }
+
+/* --- La calculadora (forma: css/estilo.css, «LA CALCULADORA») --- */
+.ca_calcu { display: flex; flex-direction: column; gap: 6px; padding: 6px; user-select: none; width: 260px; outline: none; }
+.ca_barra, .ca_cinta_barra { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.ca_modo { margin: 0; padding: 1px 8px; cursor: pointer; }
+.ca_pantalla { padding: 4px 8px; text-align: right; }
+.ca_expr { min-height: 16px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ca_m { float: left; }
+.ca_valor { overflow: hidden; white-space: nowrap; }
+.ca_teclas, .ca_cuerpo { display: flex; flex-direction: column; gap: 4px; }
+.ca_fila { display: flex; gap: 4px; }
+.ca_tecla { flex: 1 1 0; min-width: 0; height: 32px; margin: 0; padding: 0; cursor: pointer; }
+.ca_tecla.ca_ancha { flex: 4 1 0; }
+.ca_cinta { padding-top: 4px; }
+.ca_cinta_titulo { flex: 1; }
+.ca_cinta_lineas { min-height: 32px; max-height: 96px; margin-top: 4px; padding: 2px 6px; overflow: auto; text-align: right; user-select: text; }
+/* --- La calculadora (vestido) --- */
+.ca_calcu button { font: inherit; color: inherit; background: #fff; border: 1px solid #b4b8be; border-radius: 4px; }
+.ca_calcu button:hover { background: #eef1f4; }
+.ca_calcu button:active { background: #dfe3e8; }
+.ca_modo_activo { background: #d5e3fb !important; border-color: #6c98e0 !important; }
+.ca_pantalla { background: #fff; border: 1px solid #b4b8be; border-radius: 4px; }
+.ca_expr { color: #6b7078; font-size: 12px; }
+.ca_valor { font-size: 24px; font-variant-numeric: tabular-nums; }
+.ca_tecla.ca_op, .ca_tecla.ca_fn { background: #eef1f4; }
+.ca_tecla.ca_igual { background: #2b6fe0; border-color: #2b6fe0; color: #fff; }
+.ca_tecla.ca_igual:hover { background: #245fc2; }
+.ca_tecla.ca_borrar { color: #a3262f; }
+.ca_cinta_lineas { background: #fff; border: 1px solid #c4c7cc; border-radius: 4px; font-variant-numeric: tabular-nums; }
+.ca_cinta_titulo { color: #6b7078; }
+
+/* Edit Pro: el lugar de la onda. Lo de adentro (las clases ps_ y cr_menu) lo agrega el armado desde
+   las hojas de Pizarrita (bin/css_entrega.py). */
+pz-app[programa="editpro"] { display: block; max-width: 100%; }
+.pza_cuerpo .pze_editpro { min-width: 0; }
+.pza_cuerpo .pze_editpro audio { display: none; }
+.pza_cuerpo .pze_vacio { padding: 28px 16px; text-align: center; color: #5f6368; }
+/* Edit Pro y los menús, con la cara de Pizarrita 95. Sacado de las hojas de Pizarrita por bin/css_entrega.py: no editar a mano. */
+/* Barrera contra los estilos generales de la página que aloja. */
+pz-app, pz-app *, .ps_menu_cooledit_portal, .ps_menu_cooledit_portal * { box-sizing: content-box; }
+pz-app :is(button, input, select, textarea, canvas, audio, label), .ps_menu_cooledit_portal button { all: revert; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu { display: flex; align-items: stretch; gap: 0; margin: -2px 0 6px; user-select: none; position: relative; z-index: 30; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_grupo { position: relative; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_nombre { padding: 3px 8px; cursor: default; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_lista { position: absolute; top: 100%; left: 0; z-index: 40; min-width: 230px; padding: 3px 0; display: flex; flex-direction: column; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_item { display: grid; grid-template-columns: 16px 1fr auto; align-items: center; gap: 6px; text-align: left; padding: 4px 12px 4px 6px; cursor: default; white-space: nowrap; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_item:disabled { opacity: .45; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_atajo { opacity: .7; padding-left: 16px; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_raya { height: 1px; margin: 3px 6px; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu.cr_menu_botones { flex-direction: column; align-items: stretch; gap: 4px; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_lista.cr_menu_suelta { position: fixed; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_ventana { display: flex; flex-direction: column; gap: 4px; width: 100%; min-width: 0; user-select: none; --ps-tinta: #000; --ps-papel: #fff; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_marco { position: relative; overflow-x: auto; overflow-y: hidden; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_relleno { position: relative; min-height: var(--ps-alto); }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_marcas { position: relative; height: 15px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_marca { position: absolute; top: 0; height: 14px; max-width: 180px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin: 0; padding: 0 3px 0 4px; cursor: pointer; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_pegado { position: sticky; left: 0; width: max-content; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_lienzo { display: block; image-rendering: pixelated; cursor: text; touch-action: pan-y; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_aviso { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_pie { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_casetera, :is(pz-app, .ps_menu_cooledit_portal) .ps_zoom { display: flex; gap: 3px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn { min-width: 26px; height: 20px; padding: 0 4px; cursor: pointer; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn:disabled { opacity: 0.4; cursor: default; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn::before { content: ''; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="play"]::before { content: '▶'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="pausa"]::before { content: '❚❚'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="parar"]::before { content: '■'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="repetir"]::before { content: '⟲'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="alejar"]::before { content: '−'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="acercar"]::before { content: '+'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="ver-todo"]::before { content: '↔'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="ver-seleccion"]::before { content: '[ ]'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="elegir-todo"]::before { content: '▭'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="grabar"]::before { content: '●'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_estado { margin-left: auto; display: flex; gap: 12px; white-space: nowrap; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_ventana { position: relative; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_dialogo { position: absolute; left: 50%; top: 24px; transform: translateX(-50%); z-index: 5; min-width: 220px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_dialogo_titulo { padding: 2px 6px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_dialogo_cuerpo { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_dialogo_cuerpo input { width: 64px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_dialogo_botones { display: flex; justify-content: flex-end; gap: 6px; padding: 0 10px 8px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_reloj, :is(pz-app, .ps_menu_cooledit_portal) .ps_rango, :is(pz-app, .ps_menu_cooledit_portal) .ps_solo_cooledit { display: none; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_reloj, :is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_rango { display: grid; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_solo_cooledit { display: inline-block; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_grab_tiempos { display: flex; justify-content: space-between; gap: 12px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="ir-inicio"]::before { content: '|◀'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn:has(> .bi) { display: inline-flex; align-items: center; justify-content: center; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn:has(> .bi)::before, :is(pz-app, .ps_menu_cooledit_portal) .ps_btn:has(> .bi)::after { content: none !important; display: none !important; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn > .bi { pointer-events: none; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn:disabled > .bi { opacity: 0.45; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_barra { display: flex; flex-wrap: wrap; align-items: center; gap: 1px; padding: 2px 0; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_barra .ps_btn { min-width: 24px; height: 22px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_reloj { align-items: center; padding: 0 10px; min-width: 132px; min-height: 32px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_rango_num { min-height: 14px; padding: 1px 3px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_rango { height: auto !important; align-content: start; row-gap: 2px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_rango_fila > * { min-height: 14px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_estado { flex-basis: 100%; margin-left: 0; justify-content: space-between; padding-right: 18px !important; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn_multipista { gap: 4px; padding: 0 6px !important; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_barra_raya { align-self: stretch; width: 1px; margin: 2px 5px; opacity: 0.3; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn[data-icono="ir-fin"]::before { content: '▶|'; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_rango { grid-template-rows: repeat(3, auto); gap: 1px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_rango_fila { display: grid; grid-template-columns: 52px repeat(3, 72px); gap: 3px; align-items: center; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_rango_num { text-align: right; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_fila_onda { display: flex; align-items: stretch; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_fila_onda > .ps_marco { flex: 1 1 auto; min-width: 0; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_general { display: block; width: 100%; height: 30px; margin-bottom: 3px; cursor: pointer; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_db { flex: 0 0 30px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_db_marcas { height: 16px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_db_escala { position: relative; margin-top: 2px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_db_marca { position: absolute; right: 3px; transform: translateY(-50%); }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_db_marca::after { content: ''; display: inline-block; width: 3px; height: 1px; margin-left: 2px; vertical-align: middle; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_pegado > .ps_fundido_tirador { position: absolute; top: 0; z-index: 2; width: 9px; height: 9px; margin-left: -4px; box-sizing: border-box; cursor: ew-resize; touch-action: none; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_pegado > .ps_fundido_entra { margin-left: 0; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_pegado > .ps_fundido_sale { margin-left: -9px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_pegado > .ps_hud { position: absolute; top: 6px; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 2px; transform: translateX(-50%); pointer-events: none; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_hud > .ps_hud_perilla { width: 24px; height: 24px; pointer-events: auto; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_hud > .ps_hud_perilla > .cr_perilla_dibujo { width: 20px; height: 20px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_hud > .ps_hud_valor { padding: 0 3px; white-space: nowrap; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_multipista_en_ventana { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_multipista_en_ventana > * { flex: 1 1 auto; min-height: 0; }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu { font-size: 12px }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_nombre { border: 0; background: transparent; color: inherit; font: inherit; border-radius: 3px }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_nombre:hover, :is(pz-app, .ps_menu_cooledit_portal) .cr_menu_abierto > .cr_menu_nombre { background: color-mix(in srgb, currentColor 14%, transparent) }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_lista { background: var(--pz-fondo-panel, #fff); color: var(--pz-texto, #222); border: 1px solid rgba(0, 0, 0, .3); border-radius: 4px; box-shadow: 0 6px 18px rgba(0, 0, 0, .25) }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_item { border: 0; background: transparent; color: inherit; font: inherit; font-size: 12px }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_item:hover:not(:disabled) { background: #3875d7; color: #fff }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_atajo { font-size: 11px }
+:is(pz-app, .ps_menu_cooledit_portal) .cr_menu_raya { background: rgba(0, 0, 0, .18) }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_marco { border: 1px solid #000; background: var(--ps-papel); color: var(--ps-tinta) }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_marcas { border-bottom: 1px solid var(--ps-tinta) }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_marca { border: 0; border-left: 1px solid var(--ps-tinta); border-radius: 0; background: var(--ps-papel); color: var(--ps-tinta); font: 9px/14px inherit; font-size: 9px; line-height: 14px; box-shadow: none }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_marca_viva { background: var(--ps-tinta); color: var(--ps-papel) }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_aviso { font-size: 11px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_pie { font-size: 11px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn { line-height: 18px; font-size: 11px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_estado_aviso { font-weight: bold }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_estado { font-variant-numeric: tabular-nums }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_dialogo { background: #fff; color: #000; border: 1px solid #000; box-shadow: 2px 2px 0 #000; font-size: 12px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_dialogo_titulo { font-weight: bold; border-bottom: 1px solid #000 }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn:has(> .bi) { background-image: none !important }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn > .bi { font-size: 13px; line-height: 1 }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_grabar > .bi { color: #c00000 !important }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_reloj { background: #000; color: #00e000; font: bold 24px / 1 "Courier New", monospace; letter-spacing: 1px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_rango_num { background: #000; color: #00e000; font-family: "Courier New", monospace }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_rango { line-height: 14px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_rango_fila > * { line-height: 14px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_db { font-size: 9px; line-height: 1 }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_btn_texto { font-size: 11px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_barra_raya { background: currentColor }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_rango { font-size: 11px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_rango_num { font-variant-numeric: tabular-nums }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_db { font-size: 9px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_db_marca { line-height: 1 }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_db_marca::after { background: currentColor }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_pegado > .ps_fundido_tirador { background: var(--ps-cabezal, #ffd000); border: 1px solid #000 }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_hud > .ps_hud_perilla { border-radius: 50%; background: color-mix(in srgb, var(--w-cara, #c0c0c0) 85%, transparent); box-shadow: 0 0 0 1px #000 }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_hud > .ps_hud_perilla > .cr_perilla_dibujo { background-size: 20px 20px }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_hud > .ps_hud_valor { background: #000; color: #fff; font: 10px / 1.3 var(--w-letra, sans-serif) }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit { --ps-tinta: #00e000; --ps-papel: #000; --ps-sel-fondo: #fff; --ps-sel-tinta: #0000a8; --ps-cero: #005000; --ps-regla-fondo: #c0c0c0; --ps-regla-tinta: #000; --ps-cabezal: #ffff00; background: #c0c0c0; color: #000; padding: 0 3px 3px; font: 11px var(--w-letra, sans-serif); }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .cr_menu { margin: 0 -3px 2px; border-bottom: 1px solid #808080; box-shadow: 0 1px #fff; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_marco { border: 0; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff, inset 2px 2px #000, inset -2px -2px #dfdfdf; padding: 2px; background: #000; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_marcas { background: #000; border-bottom-color: #005000; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_marca { background: #000; color: #ffff00; border-left-color: #ffff00; font-family: var(--w-letra, sans-serif); }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_marca_viva { background: #ffff00; color: #000; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_aviso { color: #00e000; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_pie { align-items: stretch; gap: 6px; padding-top: 4px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_casetera, :is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_zoom { align-self: center; gap: 1px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_btn { min-width: 24px; height: 22px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_btn[data-icono="grabar"]::before { color: #c00000; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_btn.activo { box-shadow: inset 1px 1px #000, inset -1px -1px #fff, inset 2px 2px #808080 !important; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_reloj { align-items: center; padding: 0 10px; min-width: 132px; background: #000; color: #00e000; font: bold 24px / 1 "Courier New", monospace; letter-spacing: 1px; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_rango_num { background: #000; color: #00e000; padding: 1px 3px; font-family: "Courier New", monospace; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; min-height: 14px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_estado { flex-basis: 100%; margin-left: 0; padding: 1px 4px; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; justify-content: space-between; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_dialogo { background: #c0c0c0; border: 0; box-shadow: inset -1px -1px #000, inset 1px 1px #dfdfdf, inset -2px -2px #808080, inset 2px 2px #fff; padding: 3px; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_dialogo_titulo { background: linear-gradient(90deg, #000080, #1084d0); color: #fff; border: 0; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_menu_cooledit { display: flex; background: #c0c0c0; color: #000; font: 11px / 1 var(--w-letra, sans-serif); letter-spacing: 0; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_menu_cooledit .cr_menu_nombre { padding: 3px 7px; text-transform: none; background: transparent; color: #000; border: 0; box-shadow: none; min-width: 0; height: auto; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_menu_cooledit .cr_menu_nombre:hover, :is(pz-app, .ps_menu_cooledit_portal) .ps_menu_cooledit .cr_menu_abierto > .cr_menu_nombre { background: #000080; color: #fff; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit { --ps-general-vista: #ffff00; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_general { box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; border: 2px solid transparent; border-color: #808080 #fff #fff #808080; background: #000; }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_db { margin-left: 2px; padding-top: 2px; color: #000; font: 9px var(--w-letra, sans-serif); }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_btn { width: auto; min-width: 24px; height: 22px; padding: 0 4px; border: 0; border-radius: 0; background: var(--w-cara, #c0c0c0) !important; color: #000; box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf; font: 11px / 20px var(--w-letra, sans-serif); }
+:is(pz-app, .ps_menu_cooledit_portal) .ps_cara_cooledit .ps_btn:disabled { color: #808080; opacity: 1; }
