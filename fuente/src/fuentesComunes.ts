@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { apiGet } from './api/transporte';
 import { descriptoresCss } from './fuenteAjuste';
 
 // TODAS LAS FUENTES DEL FONDO COMÚN, A MANO (2026-09-28; JP: «en presentación y en este sería bueno
@@ -50,26 +49,36 @@ function declarar(l: FuenteComun[]) {
     .join('\n');
 }
 
+// (2026-11-23) Cómo se piden lo instala Pizarrita (main.tsx, api/cuentaPizarrita.ts): este archivo
+// viaja con los programas fuera de Pizarrita, donde no hay API. Sin eso, no hay fuentes comunes.
+type TraerFuentes = () => Promise<Record<string, unknown>[] | null>;
+let traerFuentes: TraerFuentes | null = null;
+export function ponerTraerFuentes(f: TraerFuentes): void {
+  traerFuentes = f;
+}
+
 export function cargarFuentesComunes(de_nuevo = false): Promise<FuenteComun[]> {
   if (lista && !de_nuevo) return Promise.resolve(lista);
   if (pedido && !de_nuevo) return pedido;
+  if (!traerFuentes) return Promise.resolve(lista || []);
+  const traer = traerFuentes;
   pedido = new Promise((listo) => {
-    apiGet<FuenteComun>('consulta_fuentes', { filtro: '*' })
-      .done((data) => {
-        const l = (Array.isArray(data.rows) ? data.rows : [])
-          .filter((f) => f && f.fuente && f.archivo)
-          .map((f) => ({ fuente: Number(f.fuente), nombre: String(f.nombre), archivo: String(f.archivo),
-            escala: f.escala == null ? null : Number(f.escala), interlineado: f.interlineado == null ? null : Number(f.interlineado),
-            ascenso: f.ascenso == null ? null : Number(f.ascenso) }));
-        lista = l;
-        declarar(l);
-        avisos.forEach((a) => a(l));
-        listo(l);
-      })
-      .fail(() => {
+    void traer().then((filas) => {
+      if (!filas) {
         pedido = null;
         listo(lista || []);
-      });
+        return;
+      }
+      const l = (filas as FuenteComun[])
+        .filter((f) => f && f.fuente && f.archivo)
+        .map((f) => ({ fuente: Number(f.fuente), nombre: String(f.nombre), archivo: String(f.archivo),
+          escala: f.escala == null ? null : Number(f.escala), interlineado: f.interlineado == null ? null : Number(f.interlineado),
+          ascenso: f.ascenso == null ? null : Number(f.ascenso) }));
+      lista = l;
+      declarar(l);
+      avisos.forEach((a) => a(l));
+      listo(l);
+    });
   });
   return pedido;
 }
